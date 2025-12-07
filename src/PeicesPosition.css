@@ -1,0 +1,114 @@
+#rookwhite7{
+        transform: translate(700%, 0%);
+}
+#knightwhite6{
+    transform: translate(600%, 0%);
+}
+#bishopwhite5{
+    transform: translate(500%, 0%);
+}
+#kingwhite4{
+    transform: translate(400%, 0%);
+}
+#queenwhite3{
+    transform: translate(300%, 0%);
+}
+#bishopwhite2{
+     transform: translate(200%, 0%);
+}    
+#knightwhite1{
+     transform: translate(100%, 0%);
+}    
+#rooktwhite0{
+     transform: translate(0%, 0%);
+}
+#rookblack8{
+    transform: translate(0%, 700%);
+}
+#knightblack9{
+    transform: translate(100%, 700%);
+}
+#bishopblack10{
+    transform: translate(200%, 700%);
+}
+#queenblack11{
+    transform: translate(300%, 700%);
+}
+#kingblack12{
+    transform: translate(400%, 700%);
+}
+#bishopblack13{
+    transform: translate(500%, 700%);
+}
+#knightblack14{
+    transform: translate(600%, 700%);
+}
+#rookblack15{
+    transform: translate(700%, 700%);
+}
+
+/* position for pawns */
+#white0{
+    transform: translate(0%, 100%);
+
+}
+#white1{
+    transform: translate(100%, 100%);
+
+}
+#white2{
+    transform: translate(200%, 100%);
+
+}
+#white3{
+    transform: translate(300%, 100%);
+
+}
+#white4{
+    transform: translate(400%, 100%);
+
+}
+#white5{
+    transform: translate(500%, 100%);
+
+}
+#white6{
+    transform: translate(600%, 100%);
+
+}
+#white7{
+    transform: translate(700%, 100%);
+
+}
+#black8{
+    transform: translate(0%, 600%);
+
+}
+#black9{
+    transform: translate(100%, 600%);
+
+}
+#black10{
+    transform: translate(200%, 600%);
+
+}
+#black11{
+    transform: translate(300%, 600%);
+
+}
+#black12{
+    transform: translate(400%, 600%);
+
+}
+#black13{
+    transform: translate(500%, 600%);
+
+}
+#black14{
+    transform: translate(600%, 600%);
+
+}
+#black15{
+    transform: translate(700%, 600%);
+
+}

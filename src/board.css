@@ -1,0 +1,96 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+.boardContainer{
+/* border: 1px solid black; */
+width: 100%;
+max-width: 650px;
+aspect-ratio: 1/1;
+place-self: center;
+ display: grid;
+  grid-template-columns: repeat(8, 1fr);
+}
+.block{
+    width:5em;
+    height:5em;
+    flex-shrink: 0;
+    flex-grow: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ff6f43;
+}
+.block:nth-child(1n){
+     background: #eee;
+}
+.block:nth-child(2n){
+     background: #444;
+}
+
+/* got it online Alternate coloring for chess board */
+.block:nth-child(16n + 1),
+.block:nth-child(16n + 3),
+.block:nth-child(16n + 5),
+.block:nth-child(16n + 7) {
+  background: #444;
+}
+
+.block:nth-child(16n + 2),
+.block:nth-child(16n + 4),
+.block:nth-child(16n + 6),
+.block:nth-child(16n + 8) {
+  background: #eee;
+}
+
+.board{
+    width: 100%;
+    max-width: 650px;
+    aspect-ratio: 0 / 0;
+    place-self: center;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+}
+
+.peice{
+    position: absolute;
+    z-index: 999;
+    color: white;
+    /* background-image:url(../src/assets/rook.png) ; */
+        width: 5em;
+    height: 5em;
+}
+.pawn{
+       width: 5em;
+    height: 5em;
+   position: absolute;
+    z-index: 999;
+    color: white;
+  }
+.peice svg{
+  width:5em
+}
+.peicesHolder{
+    display: flex;
+    position: absolute;
+    /* width: 100%; */
+    /* background: #ff000033; */
+    height: 25%;
+    z-index: 99;
+  }
+  .white{
+    color: white;
+  }
+  .black{
+    color: black;
+  }
+  path{
+    cursor: pointer;
+  }
+
+  /* 
+  path:hover{
+    
+  } */

@@ -82,12 +82,26 @@ place-self: center;
   }
   .white{
     color: white;
+        transition: 0.3s all;
   }
   .black{
     color: black;
+        transition: 0.3s all;
   }
   path{
     cursor: pointer;
+  }
+
+  .selectedPeice{
+      scale: 1.3;
+  }
+  .selectedPeice > path{
+   
+      stroke-width: 1em;
+      stroke: #ef5d5d;
+  }
+  svg{
+    transition: 0.2s all;
   }
 
   /* 

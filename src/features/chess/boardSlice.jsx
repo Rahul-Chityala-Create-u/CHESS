@@ -18,6 +18,10 @@ export const boardSlice = createSlice({
     reducers:{
         updateBoard:(state, action)=>{
             console.log("updating board", action.payload)
+            '{"tocolumn":1,"torow":4,"fromcol":1,"fromrow":6,"value":1}'
+
+            state.board[action.payload.torow][action.payload.tocolumn] = action.payload.value;
+            state.board[action.payload.fromrow][action.payload.fromcol] = 0;
         }
     }
 })

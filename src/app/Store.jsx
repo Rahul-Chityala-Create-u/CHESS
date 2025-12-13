@@ -1,13 +1,15 @@
 import {configureStore} from '@reduxjs/toolkit';
-import chessReducer from '../features/chess/chessSlice';
-import boardReducer from '../features/chess/boardSlice';
+import {chessSlice} from '../features/chess/chessSlice';
+import {boardSlice} from '../features/chess/boardSlice';
 import { selectedPeiceSLice } from  '../features/chess/selectedPeiceSlice';
+// import {peiceMapSlice} from '../features/chess/peiceMap.jsx';
 
 const store = configureStore({
   reducer: {
-    Peices: chessReducer,
-    Board :boardReducer,
+    Peices: chessSlice.reducer,
+    Board :boardSlice.reducer,
     SelectedPeice: selectedPeiceSLice.reducer,
+    // pawnsmap: peiceMapSlice.reducer,
   },
 });
 

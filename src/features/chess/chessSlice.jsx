@@ -13,11 +13,12 @@ const initialState ={
 }
 
 export const chessSlice = createSlice({
-    name:'myPawnMap',
+    name:'map',
     initialState,
     reducers:{
         updateMyPawnMap:(state, action)=>{
             console.log("updating pawn map", action.payload)
+            state.myPawnMap[action.payload.id] = action.payload.row + "," + action.payload.col;
         }
     }
 })

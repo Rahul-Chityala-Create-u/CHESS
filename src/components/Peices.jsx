@@ -28,13 +28,15 @@ useEffect(()=>{
   
 },[selectedpeiceglobal])
 
-    function moveMaterial(material,color){
+    function moveMaterial(material,color,event){
       event.stopPropagation();
       event.preventDefault();
+      document.querySelectorAll(".selectedPeice")[0]?.classList.remove("selectedPeice")
       console.log("moving " + color, material)
       let clickedPawn = event.target.parentElement.parentElement.id;
+      document.getElementById(clickedPawn).querySelector("svg").classList.add("selectedPeice");
       console.log(Board)
-      dispatch(updateSelectedPeicePosition(myPawnMap[clickedPawn]))
+      dispatch(updateSelectedPeicePosition({position:myPawnMap[clickedPawn],id:clickedPawn}))
     
 
 
@@ -51,11 +53,11 @@ useEffect(()=>{
         }
    
         return <>
-         <div onClick={() => {moveMaterial(bigPlayers[indx],color)}}className={'peice '+color} id={bigPlayers[indx]+color+indx} key={indx}>
+         <div onClick={(e) => {moveMaterial(bigPlayers[indx],color,e)}}className={'peice '+color} id={bigPlayers[indx]+color+indx} key={indx}>
           {playersMap[peic]}
         
         </div>
-          <div onClick={()=>{moveMaterial(`pawn`,color)}} className={'pawn '+color} id={color+indx}>
+          <div onClick={(e)=>{moveMaterial(`pawn`,color,e)}} className={'pawn '+color} id={color+indx}>
           {playersMap['pawn']}
           </div>
         </>

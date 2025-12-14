@@ -1,13 +1,16 @@
 import React, { use } from 'react';
-import { useEffect } from 'react';
+import { useEffect,useRef } from 'react';
 import { useSelector,useDispatch } from 'react-redux';
-import updateMyPawnMap from '../features/chess/chessSlice.jsx';
+import {updateMyPawnMap} from '../features/chess/chessSlice.jsx';
 import {updateSelectedPeicePosition} from '../features/chess/selectedPeiceSlice.jsx';
 
 export default function Peices() {
     const myPawnMap = useSelector((state)=>state.Peices.myPawnMap);
+    const myPawnMapRef = useRef(myPawnMap);
     const Board = useSelector((state)=>state.Board.board);
+    const BoardRef = useRef(Board);
     const selectedpeiceglobal = useSelector((state)=>state.SelectedPeice.currentPeicePosition);
+    const selectedpeiceglobalData = useSelector((state)=>state.SelectedPeice);
     const dispatch = useDispatch();
     const state = useSelector((state)=>state)
     const soilders = [1,2,3,4,5,6,7,8];
@@ -20,7 +23,8 @@ export default function Peices() {
       "pawn":<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path stroke="black" strokeWidth="20" strokeLinejoin="round" d="M320 32C386.3 32 440 85.7 440 152C440 179 431.1 203.9 416 224C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288L405.3 288L432 448L488.2 518.3C493.2 524.6 496 532.4 496 540.5C496 560.1 480.1 576 460.5 576L179.5 576C159.9 576 144 560.1 144 540.5C144 532.4 146.7 524.6 151.8 518.3L208 448L234.7 288L224 288C206.3 288 192 273.7 192 256C192 238.3 206.3 224 224 224C208.9 203.9 200 179 200 152C200 85.7 253.7 32 320 32z"/></svg>
     }
 useEffect(()=>{
-
+  myPawnMapRef.current = myPawnMap;
+  BoardRef.current = Board;
   console.log("selected peice from global store", selectedpeiceglobal)
   let row = selectedpeiceglobal?.split(",")[0];
   let col = selectedpeiceglobal?.split(",")[1];
@@ -29,17 +33,58 @@ useEffect(()=>{
 },[selectedpeiceglobal])
 
     function moveMaterial(material,color,event){
+      event.target.parentElement.parentElement.dataset.player
+      
+        if(event.target.parentElement.parentElement.dataset.player === 'opponent' && selectedpeiceglobal){
+        capturePeice(selectedpeiceglobalData.peiceId,event.target.parentElement.parentElement.id);
+        return;
+      }
+
       event.stopPropagation();
       event.preventDefault();
       document.querySelectorAll(".selectedPeice")[0]?.classList.remove("selectedPeice")
       console.log("moving " + color, material)
       let clickedPawn = event.target.parentElement.parentElement.id;
       document.getElementById(clickedPawn).querySelector("svg").classList.add("selectedPeice");
-      console.log(Board)
-      dispatch(updateSelectedPeicePosition({position:myPawnMap[clickedPawn],id:clickedPawn}))
+      console.log(BoardRef.current)
+      dispatch(updateSelectedPeicePosition({position:myPawnMapRef.current[clickedPawn],id:clickedPawn,player:event.target.parentElement.parentElement.dataset.player}))
+    
     
 
+  }
 
+  function capturePeice(myPeice,opponentPeice){
+
+    console.log(`capturing ${opponentPeice} with ${myPeice}`)
+    let myPosition = myPawnMapRef.current[myPeice];
+    let opponentPosition = myPawnMapRef.current[opponentPeice];
+    let myRow = parseInt(myPosition.split(",")[0]);
+    let myCol = parseInt(myPosition.split(",")[1]);
+    let opponentRow = parseInt(opponentPosition.split(",")[0]);
+    let opponentCol = parseInt(opponentPosition.split(",")[1]);
+    let rowDiff = myRow - opponentRow
+    let colDiff = myCol - opponentCol
+    //move my peice to opponent position
+    if(myRow == opponentRow || myCol == opponentCol || rowDiff > 1 || colDiff >1 || rowDiff < 0){
+      console.log("invalid capture move");
+      document.querySelectorAll(".selectedPeice")[0]?.classList.remove("selectedPeice")
+      return false
+    }else if(rowDiff == 1 && colDiff != 0 && (colDiff == 1 || colDiff == -1)){
+       document.getElementById(myPeice).style.setProperty(`transform`, `translate(${(myCol-colDiff)*100}%, ${(myRow*100)-(rowDiff*100)}%)`);
+      dispatch(updateSelectedPeicePosition({position:opponentRow+","+opponentCol,id:myPeice}));
+      dispatch(updateMyPawnMap({row:opponentRow,col:opponentCol,id:myPeice}));
+      console.log("valid capture move");
+      document.querySelectorAll(".selectedPeice")[0]?.classList.remove("selectedPeice");
+      document.getElementById(opponentPeice).classList.add("hide");
+
+      //when pawn reaches end of board
+      if(opponentRow == 0){
+        document.getElementById("materialSelectionModal").classList.remove("hide");
+      }
+
+
+      return;
+    }
   }
     return (
       <>
@@ -48,16 +93,18 @@ useEffect(()=>{
       bigPlayers.map((peic,indx)=>{
         if(indx<8){
           var color = 'white';
+          var player = 'opponent';
         }else{
-         var  color = 'black';
+          var  color = 'black';
+          var player = 'me';
         }
    
         return <>
-         <div onClick={(e) => {moveMaterial(bigPlayers[indx],color,e)}}className={'peice '+color} id={bigPlayers[indx]+color+indx} key={indx}>
+         <div onClick={(e) => {moveMaterial(bigPlayers[indx],color,e)}}className={'peice '+color} id={bigPlayers[indx]+color+indx} key={indx} data-player={player}>
           {playersMap[peic]}
         
         </div>
-          <div onClick={(e)=>{moveMaterial(`pawn`,color,e)}} className={'pawn '+color} id={color+indx}>
+          <div onClick={(e)=>{moveMaterial(`pawn`,color,e)}} className={'pawn '+color} id={color+indx}  data-player={player} key={indx+16}>
           {playersMap['pawn']}
           </div>
         </>

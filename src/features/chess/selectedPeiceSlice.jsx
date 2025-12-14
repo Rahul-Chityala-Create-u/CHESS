@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 const initialState ={
     currentPeicePosition:null,
-    peiceId:null
+    peiceId:null,
+    player:null,
 }
 export const selectedPeiceSLice = createSlice({
     name:'selectedPeice',
@@ -11,6 +12,7 @@ export const selectedPeiceSLice = createSlice({
             console.log("updating selected peice position", action.payload.position)
             state.currentPeicePosition = action.payload.position;
             state.peiceId = action.payload.id;
+            state.player = action.payload.player;
         }
     }
 })

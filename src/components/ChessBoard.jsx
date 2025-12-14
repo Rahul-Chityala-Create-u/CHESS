@@ -76,7 +76,9 @@ function calculatePawnMovements(e)
 {
   e.stopPropagation();
   e.preventDefault();
-
+      if (selectedpeiceglobaRef.current.currentPeicePosition == null) {
+        return;
+      }
       console.log(myPawnMapRef.current)
       let peiceRow = selectedpeiceglobaRef.current.currentPeicePosition?.split(",")[0];
       let peiceCol = selectedpeiceglobaRef.current.currentPeicePosition?.split(",")[1];
@@ -134,7 +136,7 @@ function moveMyPawn(pawn,moveBy,digonalMovement){
     let currentCol=parseInt(myPawnMapRef.current[pawn].split(",")[1]);
     let currentRow= parseInt(myPawnMapRef.current[pawn].split(",")[0]);   
     let currentActRow  = currentCol == 0 ? 1 : currentCol;
-    debugger;
+    // debugger;
     if (moveBy == 2 && currentRow != 6) {
         return BoardRef.current; 
     } 

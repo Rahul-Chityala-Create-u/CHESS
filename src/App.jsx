@@ -5,13 +5,14 @@ import './App.css'
 import './board.css'
 import './PeicesPosition.css'
 import ChessBoard from './components/ChessBoard'
+import UpdateTo from './components/UpdateTo'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-      
+      <UpdateTo></UpdateTo>
       <ChessBoard>
       </ChessBoard>
     </>

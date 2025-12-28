@@ -87,21 +87,39 @@ function calculatePawnMovements(e)
       let clickedCol = e.target.dataset.col//position.split(",")[1];
    // console.log("peiceRow",peiceRow,"peiceCol",peiceCol,"clickedRow",clickedRow,"clickedCol",clickedCol)
 
-    let rowDiff = parseInt(peiceRow) - parseInt(clickedRow);
-    let colDiff = parseInt(peiceCol) - parseInt(clickedCol);
+   if(document.querySelectorAll(`#${peiceId}`)[0].getAttribute("data-player") == "me"){
+    var  rowDiff = parseInt(peiceRow) - parseInt(clickedRow);
+    var colDiff = parseInt(peiceCol) - parseInt(clickedCol);
+   }else{
+    var  rowDiff = parseInt(clickedRow) - parseInt(peiceRow);
+    var colDiff = parseInt(clickedCol) - parseInt(peiceCol);
+   }
+   
     console.log("rowDiff",rowDiff,"colDiff",colDiff)
-  if(peiceRow == 6){
+      if(document.querySelectorAll(`#${peiceId}`)[0].getAttribute("data-pawn-playing-as") == "pawn"){
+        
+         if(peiceRow == 6 || peiceRow == 1){
     if(colDiff == 0 && rowDiff < 3 && rowDiff >0){
     //move forward
     //document.getElementById(peiceId).style.transform = `translate(${peiceCol*100}%, ${(peiceRow*100)-(rowDiff*100)}%);`;
-    document.getElementById(peiceId).style.setProperty(`transform`, `translate(${peiceCol*100}%, ${(peiceRow*100)-(rowDiff*100)}%)`);
+    if(document.querySelectorAll(`#${peiceId}`)[0].getAttribute("data-player") == "me"){
+      document.getElementById(peiceId).style.setProperty(`transform`, `translate(${peiceCol*100}%, ${(peiceRow*100)-(rowDiff*100)}%)`);
+    }else{
+      document.getElementById(peiceId).style.setProperty(`transform`, `translate(${peiceCol*100}%, ${(peiceRow*100)+(rowDiff*100)}%)`);
+    }
+
    dispatch(updateSelectedPeicePosition({position:clickedRow+","+clickedCol,id:peiceId}));
     dispatch(updateMyPawnMap({row:clickedRow,col:clickedCol,id:peiceId}));
     // dispatch(updatePeiceMap({row:clickedRow,col:clickedCol,id:peiceId}))
 
     moveMyPawn(peiceId,rowDiff,colDiff);
   }else if(colDiff == 0 && rowDiff < 2 && rowDiff >0){
-        document.getElementById(peiceId).style.setProperty(`transform`, `translate(${peiceCol*100}%, ${(peiceRow*100)-(rowDiff*100)}%)`);
+    if(document.querySelectorAll(`#${peiceId}`)[0].getAttribute("data-player") == "me"){
+      document.getElementById(peiceId).style.setProperty(`transform`, `translate(${peiceCol*100}%, ${(peiceRow*100)-(rowDiff*100)}%)`);
+      
+    }else{
+document.getElementById(peiceId).style.setProperty(`transform`, `translate(${peiceCol*100}%, ${(peiceRow*100)+(rowDiff*100)}%)`);
+    }
    dispatch(updateSelectedPeicePosition({position:clickedRow+","+clickedCol,id:peiceId}));
     dispatch(updateMyPawnMap({row:clickedRow,col:clickedCol,id:peiceId}));
      moveMyPawn(peiceId,rowDiff,colDiff);
@@ -111,12 +129,85 @@ function calculatePawnMovements(e)
   }else{
     if(colDiff == 0 && rowDiff >0 && rowDiff <2){
       //move forward by One Step
-      document.getElementById(peiceId).style.setProperty(`transform`, `translate(${peiceCol*100}%, ${(peiceRow*100)-(rowDiff*100)}%)`);
-   dispatch(updateSelectedPeicePosition({position:clickedRow+","+clickedCol,id:peiceId}));
+      if(document.querySelectorAll(`#${peiceId}`)[0].getAttribute("data-player") == "me"){
+        document.getElementById(peiceId).style.setProperty(`transform`, `translate(${peiceCol*100}%, ${(peiceRow*100)-(rowDiff*100)}%)`);
+
+      }else{
+        document.getElementById(peiceId).style.setProperty(`transform`, `translate(${peiceCol*100}%, ${(peiceRow*100)+(rowDiff*100)}%)`);
+      }
+    dispatch(updateSelectedPeicePosition({position:clickedRow+","+clickedCol,id:peiceId}));
     dispatch(updateMyPawnMap({row:clickedRow,col:clickedCol,id:peiceId}));
      moveMyPawn(peiceId,rowDiff,colDiff);
     }
   }
+      }else if(document.querySelectorAll(`#${peiceId}`)[0].getAttribute("data-pawn-playing-as") == "rook"){
+        if(clickedCol == peiceCol || peiceRow == clickedRow){
+           if(document.querySelectorAll(`#${peiceId}`)[0].getAttribute("data-player") == "me"){
+          document.getElementById(peiceId).style.setProperty(`transform`, `translate(${Math.abs(clickedCol)*100}%, ${(peiceRow*100)-(rowDiff*100)}%)`);
+        }else{
+          document.getElementById(peiceId).style.setProperty(`transform`, `translate(${Math.abs(clickedCol)*100}%, ${(peiceRow*100)+(rowDiff*100)}%)`);
+        }
+         dispatch(updateMyPawnMap({row:clickedRow,col:clickedCol,id:peiceId}));
+        }
+       
+    }else if(document.querySelectorAll(`#${peiceId}`)[0].getAttribute("data-pawn-playing-as") == "knight"){
+      
+      if((((clickedCol == parseInt(peiceCol)+1) && (clickedRow == parseInt(peiceRow)-2)) ||
+       ((clickedCol == parseInt(peiceCol)-1) && (clickedRow == parseInt(peiceRow)-2)) ||
+       ((clickedCol == parseInt(peiceCol)-2) && (clickedRow == parseInt(peiceRow)-1)) || 
+        ((clickedCol == parseInt(peiceCol)+2) && (clickedRow == parseInt(peiceRow)-1)) ||
+        ((clickedCol == parseInt(peiceCol)+2) && (clickedRow == parseInt(peiceRow)+1)) ||
+        ((clickedCol == parseInt(peiceCol)-2) && (clickedRow == parseInt(peiceRow)+1)) ||
+        ((clickedCol == parseInt(peiceCol)-1) && (clickedRow == parseInt(peiceRow)+2)) ||
+        ((clickedCol == parseInt(peiceCol)+1) && (clickedRow == parseInt(peiceRow)+2))) &&
+        document.querySelectorAll(`#${peiceId}`)[0].getAttribute("data-player") == "me"
+      ){
+       
+        document.getElementById(peiceId).style.setProperty(`transform`, `translate(${Math.abs(clickedCol)*100}%, ${(peiceRow*100)-(rowDiff*100)}%)`);
+        dispatch(updateMyPawnMap({row:clickedRow,col:clickedCol,id:peiceId}));
+
+      }else if((clickedCol == parseInt(peiceCol)-1) && (clickedRow == parseInt(peiceRow)+2) ||
+      (clickedCol == parseInt(peiceCol)+1) && (clickedRow == parseInt(peiceRow)+2) ||
+      (clickedCol == parseInt(peiceCol)-2) && (clickedRow == parseInt(peiceRow)+1) || 
+       (clickedCol == parseInt(peiceCol)+2) && (clickedRow == parseInt(peiceRow)+1) ||
+       (clickedCol == parseInt(peiceCol)-2) && (clickedRow == parseInt(peiceRow)-1) ||
+        (clickedCol == parseInt(peiceCol)+2) && (clickedRow == parseInt(peiceRow)-1) ||
+        (clickedCol == parseInt(peiceCol)-1) && (clickedRow == parseInt(peiceRow)-2) ||
+        (clickedCol == parseInt(peiceCol)+1) && (clickedRow == parseInt(peiceRow)-2
+    )){
+         document.getElementById(peiceId).style.setProperty(`transform`, `translate(${Math.abs(clickedCol)*100}%, ${(peiceRow*100)+(rowDiff*100)}%)`);
+        dispatch(updateMyPawnMap({row:clickedRow,col:clickedCol,id:peiceId}));
+
+        }
+     
+    }
+    else if(document.querySelectorAll(`#${peiceId}`)[0].getAttribute("data-pawn-playing-as") == "bishop"){
+      if((document.querySelectorAll(`#${peiceId}`)[0].getAttribute("data-player") == "me") && (Math.abs(parseInt(clickedRow)-parseInt(peiceRow)) == Math.abs(parseInt(clickedCol)-parseInt(peiceCol)))){
+        document.getElementById(peiceId).style.setProperty(`transform`, `translate(${Math.abs(clickedCol)*100}%, ${(peiceRow*100)-(rowDiff*100)}%)`);
+        dispatch(updateMyPawnMap({row:clickedRow,col:clickedCol,id:peiceId}));
+      }else if((document.querySelectorAll(`#${peiceId}`)[0].getAttribute("data-player") == "opponent") && (Math.abs(parseInt(clickedRow)-parseInt(peiceRow)) == Math.abs(parseInt(clickedCol)-parseInt(peiceCol)))){
+        document.getElementById(peiceId).style.setProperty(`transform`, `translate(${Math.abs(clickedCol)*100}%, ${(peiceRow*100)+(rowDiff*100)}%)`);
+         dispatch(updateMyPawnMap({row:clickedRow,col:clickedCol,id:peiceId}));
+      }
+    }
+      else if(document.querySelectorAll(`#${peiceId}`)[0].getAttribute("data-pawn-playing-as") == "queen"){
+        if((document.querySelectorAll(`#${peiceId}`)[0].getAttribute("data-player") == "me") && ((clickedCol == peiceCol || peiceRow == clickedRow) || (Math.abs(parseInt(clickedRow)-parseInt(peiceRow)) == Math.abs(parseInt(clickedCol)-parseInt(peiceCol))) )){ //Math.abs(parseInt(clickedRow)-parseInt(peiceRow)) == Math.abs(parseInt(clickedCol)-parseInt(peiceCol))
+          document.getElementById(peiceId).style.setProperty(`transform`, `translate(${Math.abs(clickedCol)*100}%, ${(peiceRow*100)-(rowDiff*100)}%)`);
+          dispatch(updateMyPawnMap({row:clickedRow,col:clickedCol,id:peiceId}));
+        }else if((document.querySelectorAll(`#${peiceId}`)[0].getAttribute("data-player") == "opponent") && ((clickedCol == peiceCol || peiceRow == clickedRow) || (Math.abs(parseInt(clickedRow)-parseInt(peiceRow)) == Math.abs(parseInt(clickedCol)-parseInt(peiceCol)))) ){ //Math.abs(parseInt(clickedRow)-parseInt(peiceRow)) == Math.abs(parseInt(clickedCol)-parseInt(peiceCol))
+          document.getElementById(peiceId).style.setProperty(`transform`, `translate(${Math.abs(clickedCol)*100}%, ${(peiceRow*100)+(rowDiff*100)}%)`);
+           dispatch(updateMyPawnMap({row:clickedRow,col:clickedCol,id:peiceId}));
+        }
+      }else if(document.querySelectorAll(`#${peiceId}`)[0].getAttribute("data-pawn-playing-as") == "king"){
+        if((document.querySelectorAll(`#${peiceId}`)[0].getAttribute("data-player") == "me") && (clickedCol >= parseInt(peiceCol)-1 && clickedCol <= parseInt(peiceCol)+1 && clickedRow >= parseInt(peiceRow)-1 && clickedRow <= parseInt(peiceRow)+1)){
+          document.getElementById(peiceId).style.setProperty(`transform`, `translate(${Math.abs(clickedCol)*100}%, ${(peiceRow*100)-(rowDiff*100)}%)`);
+          dispatch(updateMyPawnMap({row:clickedRow,col:clickedCol,id:peiceId}));
+        }else if((document.querySelectorAll(`#${peiceId}`)[0].getAttribute("data-player") == "opponent") && (clickedCol >= parseInt(peiceCol)-1 && clickedCol <= parseInt(peiceCol)+1 && clickedRow >= parseInt(peiceRow)-1 && clickedRow <= parseInt(peiceRow)+1)){
+          document.getElementById(peiceId).style.setProperty(`transform`, `translate(${Math.abs(clickedCol)*100}%, ${(peiceRow*100)+(rowDiff*100)}%)`);
+          dispatch(updateMyPawnMap({row:clickedRow,col:clickedCol,id:peiceId}));
+        }
+      }
+      
     dispatch(updateSelectedPeicePosition({position:null,id:peiceId}));
     setTimeout(()=>{
       document.getElementById(peiceId).querySelector("svg").classList.remove("selectedPeice");

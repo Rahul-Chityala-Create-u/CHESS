@@ -3,7 +3,7 @@ import { useEffect,useRef } from 'react';
 import { useSelector,useDispatch } from 'react-redux';
 import {updateMyPawnMap} from '../features/chess/chessSlice.jsx';
 import {updateSelectedPeicePosition} from '../features/chess/selectedPeiceSlice.jsx';
-
+import {updateBoard} from '../features/chess/boardSlice.jsx';
 export default function Peices() {
     const myPawnMap = useSelector((state)=>state.Peices.myPawnMap);
     const myPawnMapRef = useRef(myPawnMap);
@@ -35,7 +35,7 @@ useEffect(()=>{
     function moveMaterial(material,color,event){
       event.target.parentElement.parentElement.dataset.player
       
-        if(event.target.parentElement.parentElement.dataset.player === 'opponent' && selectedpeiceglobal){
+        if((event.target.parentElement.parentElement.dataset.player != selectedpeiceglobalData.player) && selectedpeiceglobal){ //event.target.parentElement.parentElement.dataset.player
         capturePeice(selectedpeiceglobalData.peiceId,event.target.parentElement.parentElement.id);
         return;
       }
@@ -81,11 +81,74 @@ useEffect(()=>{
       if(opponentRow == 0){
         document.getElementById("materialSelectionModal").classList.remove("hide");
       }
-
+      moveMyPawn(myPeice,rowDiff,colDiff);
 
       return;
     }
   }
+
+
+  // Move Peice inside matrix Functionality
+  function moveMyPawn(pawn,moveBy,digonalMovement){
+  
+      const myPawn = 1;
+      const theirPawn = -1;
+      const emptyBlock = 0;
+      const theirmaterial = [-10,-7,-5,-12,-20,-5,-7,-10,-2];
+      const myMaterial = [10,7,5,12,20,5,7,10,1];
+      
+      let currentCol=parseInt(myPawnMapRef.current[pawn].split(",")[1]);
+      let currentRow= parseInt(myPawnMapRef.current[pawn].split(",")[0]);   
+      let currentActRow  = currentCol == 0 ? 1 : currentCol;
+      // debugger;
+      if (moveBy == 2 && currentRow != 6) {
+          return BoardRef.current; 
+      } 
+  
+       if (digonalMovement < 0) {
+         if (BoardRef.current[currentRow-moveBy][currentCol+1] != emptyBlock) { //&& theirmaterial.indexOf(BoardRef.current[currentRow-moveBy][currentCol-1]) != -1
+             dispatch(updateBoard({tocolumn:currentCol+1,torow :currentRow-moveBy,fromcol:currentCol,fromrow:currentRow,value :BoardRef.current[currentRow][currentCol]}));
+            //  BoardRef.current[currentRow-moveBy][currentCol-1] =  BoardRef.current[currentRow][currentCol] 
+            //   BoardRef.current[currentRow][currentCol] = 0;
+             // updating Access Map
+              myPawnMapRef.current[pawn] =currentRow-moveBy+"," +currentCol-1;
+  
+  
+              if (currentRow-moveBy == 0) {
+          console.log("congrats!, you can upgrade your pawn now")
+      }
+         }
+          return chessBoard
+      }else
+      if(digonalMovement > 0){
+            if (BoardRef.current[currentRow-moveBy][currentCol-1] != emptyBlock) {
+             dispatch(updateBoard({tocolumn:currentCol-1,torow :currentRow-moveBy,fromcol:currentCol,fromrow:currentRow,value :BoardRef.current[currentRow][currentCol]}));
+              //  BoardRef.current[currentRow-moveBy][currentCol+1] =  BoardRef.current[currentRow][currentCol]
+            //  BoardRef.current[currentRow][currentCol] = 0;
+                 // updating Access Map
+              myPawnMapRef.current[pawn] =currentRow-moveBy+"," +currentCol+1;
+                 if (currentRow-moveBy == 0) {
+          console.log("congrats!, you can upgrade your pawn now")
+      }
+         }
+          return BoardRef.current
+      }
+  
+      if (BoardRef.current[currentRow-1][currentCol] != 0 || BoardRef.current[currentRow-moveBy][currentCol] != 0) {
+          return "Cannot move!, there is a material Ahead"; 
+          return BoardRef.current
+      } 
+  
+      dispatch(updateBoard({tocolumn:currentCol,torow :currentRow-moveBy,fromcol:currentCol,fromrow:currentRow,value :BoardRef.current[currentRow][currentCol]}));
+      /*BoardRef.current[currentRow-moveBy][currentCol] = BoardRef.current[currentRow][currentCol];
+      BoardRef.current[currentRow][currentCol] = 0;*/
+      if (currentRow-moveBy == 0) {
+          console.log("congrats!, you can upgrade your pawn now")
+      }
+      // myPawnMapRef.current[pawn] =currentRow-moveBy+"," +currentCol;
+      return BoardRef.current
+  }
+  
     return (
       <>
       <div className='peicesHolder'>
@@ -100,11 +163,11 @@ useEffect(()=>{
         }
    
         return <>
-         <div onClick={(e) => {moveMaterial(bigPlayers[indx],color,e)}}className={'peice '+color} id={bigPlayers[indx]+color+indx} key={indx} data-player={player}>
+         <div onClick={(e) => {moveMaterial(bigPlayers[indx],color,e)}}className={'peice '+color} id={bigPlayers[indx]+color+indx} key={indx} data-player={player} data-pawn-playing-as={peic}>
           {playersMap[peic]}
         
         </div>
-          <div onClick={(e)=>{moveMaterial(`pawn`,color,e)}} className={'pawn '+color} id={color+indx}  data-player={player} key={indx+16}>
+          <div onClick={(e)=>{moveMaterial(`pawn`,color,e)}} className={'pawn '+color} id={color+indx}  data-player={player} data-pawn-playing-as={`pawn`} key={indx+16}>
           {playersMap['pawn']}
           </div>
         </>

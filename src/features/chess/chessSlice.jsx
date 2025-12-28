@@ -25,7 +25,14 @@ const initialState ={
         "bishopwhite5":'0,5',
         "knightwhite6":'0,6',
         "rookwhite7":'0,7',
-
+        "rookblack8":'7,0',
+        "knightblack9":'7,1',
+        "bishopblack10":'7,2',
+        "queenblack11":'7,3',
+        "kingblack12":'7,4',
+        "bishopblack13":'7,5',
+        "knightblack14":'7,6',
+        "rookblack15":'7,7',
     },
 }
 

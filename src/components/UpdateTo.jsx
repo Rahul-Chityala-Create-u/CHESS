@@ -20,10 +20,10 @@ const playersMap ={"rook":<svg className={classColor} fill="currentColor" xmlns=
     }
 
     function updatepeiceTo(newPeice){
-        
         document.getElementById("materialSelectionModal").classList.add("hide");
         console.log("updating peice to ", newPeice);
         document.querySelectorAll(`#${selectedpeiceglobal.peiceId}`)[0].innerHTML = playersMapString[newPeice];
+         document.querySelectorAll(`#${selectedpeiceglobal.peiceId}`)[0].setAttribute("data-pawn-playing-as",newPeice);
     }
   return (
     <>
